@@ -27,8 +27,8 @@ function parsePairUrl(raw: string): PairPayload | null {
     const token = url.searchParams.get('token');
     if (!relay || !token) return null;
     return {
-      relay: decodeURIComponent(relay),
-      token: decodeURIComponent(token),
+      relay,
+      token,
       name: url.searchParams.get('name') ?? undefined,
     };
   } catch {
