@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -27,8 +27,8 @@ function parsePairUrl(raw: string): PairPayload | null {
     const token = url.searchParams.get('token');
     if (!relay || !token) return null;
     return {
-      relay: decodeURIComponent(relay),
-      token: decodeURIComponent(token),
+      relay,
+      token,
       name: url.searchParams.get('name') ?? undefined,
     };
   } catch {

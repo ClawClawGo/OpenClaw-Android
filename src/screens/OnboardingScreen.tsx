@@ -44,12 +44,12 @@ export default function OnboardingScreen({ navigation }: any) {
       const parsed = new URL(url);
       if (
         (parsed.protocol === 'openclaw:' && parsed.hostname === 'pair') ||
-        (parsed.hostname === 'openclaw.io' && parsed.pathname === '/pair')
+        (parsed.protocol === 'https:' && parsed.hostname === 'openclaw.io' && parsed.pathname === '/pair')
       ) {
         const relay = parsed.searchParams.get('relay');
         const tok = parsed.searchParams.get('token');
         if (relay && tok) {
-          await connectWith(decodeURIComponent(relay), decodeURIComponent(tok));
+          await connectWith(relay, tok);
         }
       }
     } catch {

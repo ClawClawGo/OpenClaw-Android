@@ -4,7 +4,6 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Text } from 'react-native';
-import * as Linking from 'expo-linking';
 
 import { Colors } from './src/theme/colors';
 import { useStore } from './src/store';
