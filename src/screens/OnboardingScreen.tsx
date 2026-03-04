@@ -49,7 +49,7 @@ export default function OnboardingScreen({ navigation }: any) {
         const relay = parsed.searchParams.get('relay');
         const tok = parsed.searchParams.get('token');
         if (relay && tok) {
-          await connectWith(decodeURIComponent(relay), decodeURIComponent(tok));
+          await connectWith(relay, tok);
         }
       }
     } catch {
