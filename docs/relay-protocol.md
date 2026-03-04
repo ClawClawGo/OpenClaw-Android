@@ -1,5 +1,70 @@
 # OpenClaw Relay — WebSocket JSON-RPC 2.0 Protocol Spec
 
+## Mobile App Pairing (QR Code)
+
+The recommended way to connect the OpenClaw Mobile app to your gateway is via **QR code pairing** from the OpenClaw web dashboard.
+
+### Flow
+
+```
+OpenClaw Dashboard                    Mobile App
+       │                                   │
+       │  1. User clicks "Connect Mobile"  │
+       │  2. Dashboard generates           │
+       │     one-time pairing token        │
+       │  3. Displays QR code             │
+       │                                   │
+       │         ◄── Scan QR ────────────  │
+       │                                   │
+       │  4. App parses deep link          │
+       │  5. Saves relay URL + token       │
+       │     to Keychain/Keystore          │
+       │  6. Connects via WebSocket        │
+       │  7. Authenticates                 │
+```
+
+### QR Code Payload Format
+
+The QR code encodes a URL in one of two formats:
+
+**Custom scheme (preferred):**
+```
+openclaw://pair?relay=wss%3A%2F%2Frelay.openclaw.io&token=oc_abc123xyz&name=My%20Gateway
+```
+
+**Universal link (fallback for web):**
+```
+https://openclaw.io/pair?relay=wss%3A%2F%2Frelay.openclaw.io&token=oc_abc123xyz&name=My%20Gateway
+```
+
+### Query Parameters
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `relay` | ✅ | URL-encoded WebSocket relay endpoint (e.g. `wss://relay.openclaw.io`) |
+| `token` | ✅ | One-time or long-lived auth token for the relay |
+| `name` | ❌ | Human-readable gateway name shown in the app |
+
+### Security Recommendations
+
+- Pairing tokens should be **short-lived** (10–15 minutes) if generated as one-time codes
+- Alternatively, use a **device-scoped long-lived token** that can be revoked from the dashboard
+- The QR code should only be shown to authenticated dashboard users
+- Tokens are stored in device Keychain/Keystore immediately after scanning — never in plaintext
+
+### Dashboard Implementation Guide
+
+On the OpenClaw web dashboard, add a **"Connect Mobile App"** button in Settings that:
+
+1. Calls your gateway API to generate a pairing token: `POST /api/devices/pair`
+2. Returns `{ token: "oc_xxx", relay: "wss://relay.openclaw.io", expiresAt: "..." }`
+3. Encodes the URL and renders it as a QR code (e.g. using `qrcode` npm package)
+4. Shows a countdown timer until expiry
+5. On successful connection, the mobile app calls `relay.authenticate` and the gateway registers the device
+
+---
+
+
 ## Transport
 
 - Protocol: `WebSocket` over TLS (`wss://`)

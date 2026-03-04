@@ -1,30 +1,45 @@
 {
   "expo": {
-    "name": "openclaw-mobile",
+    "name": "OpenClaw",
     "slug": "openclaw-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "scheme": "openclaw",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0D0F14"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.openclaw.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "OpenClaw uses the camera to scan QR codes for pairing with your AI Gateway dashboard."
+      }
     },
     "android": {
+      "package": "io.openclaw.mobile",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0D0F14",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["android.permission.CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "OpenClaw uses the camera to scan QR codes for pairing with your AI Gateway dashboard."
+        }
+      ]
+    ]
   }
 }

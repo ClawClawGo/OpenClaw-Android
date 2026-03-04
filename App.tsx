@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Text } from 'react-native';
+import * as Linking from 'expo-linking';
 
 import { Colors } from './src/theme/colors';
 import { useStore } from './src/store';
@@ -11,6 +12,7 @@ import { getAuthToken, getRelayUrl, getBudgetLimit } from './src/services/secure
 import * as WS from './src/services/websocket';
 
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import PairScreen from './src/screens/PairScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
 import AgentsScreen from './src/screens/AgentsScreen';
 import ChatScreen from './src/screens/ChatScreen';
@@ -57,6 +59,16 @@ function MainTabs({ navigation }: any) {
   );
 }
 
+const linking = {
+  prefixes: ['openclaw://', 'https://openclaw.io'],
+  config: {
+    screens: {
+      Onboarding: 'onboarding',
+      Pair: 'pair',
+    },
+  },
+};
+
 function AppNavigator() {
   const { isAuthenticated } = useStore();
 
@@ -64,6 +76,11 @@ function AppNavigator() {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+        <Stack.Screen
+          name="Pair"
+          component={PairScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     );
   }
@@ -125,7 +142,7 @@ export default function App() {
   }, [usageStats, budgetLimitUsd]);
 
   return (
-    <NavigationContainer theme={NavTheme}>
+    <NavigationContainer theme={NavTheme} linking={linking}>
       <StatusBar style="light" />
       <AppNavigator />
     </NavigationContainer>
